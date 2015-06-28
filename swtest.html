@@ -16,23 +16,32 @@
         navigator.serviceWorker.register('/service-worker.js').then(function() {
 
 
-        //setTimeout(fetchImg, 0, 2);
+        setTimeout(fetchImg, 0, 2);
 
         
         var es = new EventSource('/sse');
 
-es.onmessage = function(e) {
-  var newElement = document.createElement("li");
-  
-  newElement.innerHTML = "message: " + e.data;
-  document.getElementById('foo').appendChild(newElement);
-}
+        es.onmessage = function(e) {
+          var newElement = document.createElement("li");
+          
+          newElement.innerHTML = "message: " + e.data;
+          document.getElementById('foo').appendChild(newElement);
+        }
 
-setTimeout(function() {
-    es.close();
-}, 20000);
+        es.onerror = function(e) {
+            var newElement = document.createElement("li");
+          
+            newElement.innerHTML = "error: " + e;
+            document.getElementById('foo').appendChild(newElement);
+        };
 
-});
+        setTimeout(function() {
+            es.close();
+        }, 20000);
+
+    });
+
+    setTimeout(fetchImg, 0, 1);
 
 
     </script>
