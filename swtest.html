@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>sw test</title>
+
+
+    <script>
+
+        var fetchImg = function fetchImg (id) {
+            console.log(id);
+            var img = document.createElement('img');
+            img.src = "heart_rate.png?i=" + id + "&n=" + Date.now();
+            window.setTimeout(fetchImg, 1000, id);
+        };
+
+        navigator.serviceWorker.register('/service-worker.js').then(function() {
+
+
+        //setTimeout(fetchImg, 0, 2);
+
+        
+        var es = new EventSource('/sse');
+
+es.onmessage = function(e) {
+  var newElement = document.createElement("li");
+  
+  newElement.innerHTML = "message: " + e.data;
+  document.getElementById('foo').appendChild(newElement);
+}
+
+setTimeout(function() {
+    es.close();
+}, 20000);
+
+});
+
+
+    </script>
+
+</head>
+
+<body>
+
+    <ul id="foo"></ul>
+
+    <img src="heart_rate.png" />
+
+    
+
+
+</body>
+
+</html>
